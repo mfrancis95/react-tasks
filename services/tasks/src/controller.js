@@ -17,7 +17,7 @@ exports.createTask = async (request, response) => {
 
 exports.deleteTask = async (request, response) => {
     const result = await tasks.removeOne({_id: request.params._id});
-    response.json({success: true});
+    response.json({success: result.deletedCount > 0});
 };
 
 exports.getTask = async (request, response) => {
@@ -38,5 +38,5 @@ exports.updateTask = async (request, response) => {
     const result = await tasks.updateOne(
         {_id: new MongoClient.ObjectID(request.params._id)},
         {$set: {completed: request.body.completed}});
-    response.json({success: true});
+    response.json({success: result.modifiedCount > 0});
 }
