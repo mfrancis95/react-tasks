@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.8.1",
     "express": "^4.17.1",
     "express-validator": "^6.6.1",
     "mongodb": "^3.6.1"
