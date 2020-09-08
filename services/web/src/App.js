@@ -1,4 +1,5 @@
 import React from 'react';
+import CreateTask from './CreateTask';
 import Task from './Task';
 
 const TASKS_API = `${process.env.REACT_APP_TASKS_API_HOST}:${process.env.REACT_APP_TASKS_API_PORT}/api/v1`;
@@ -30,6 +31,7 @@ export default class App extends React.Component {
         if (data.success) {
             let tasks = this.state.tasks;
             tasks.splice(tasks.findIndex(task => task._id === _id), 1);
+            this.setState({tasks: tasks});
         }
     }
     
@@ -60,14 +62,22 @@ export default class App extends React.Component {
         return (
             <div>
                 <nav className="bg-primary navbar navbar-dark navbar-expand-lg sticky-top">
-                  <div className="container">
-                    <a className="navbar-brand" href="/">Tasks</a>
+                    <div className="container">
+                        <a className="navbar-brand" href="/">Tasks</a>
+                        <div className="collapse navbar-collapse" id="collapse">
+                            <ul className="navbar-nav">
+                                <li>
+                                    <a className="nav-link" data-toggle="modal" data-target="#modal" href="#">Create Task</a>
+                                </li>
+                            </ul>
+                        </div>
                   </div>
                 </nav>
                 <div className="container mt-4" id="root">
                     <div className="card-columns">
                         {tasks}
                     </div>
+                    <CreateTask addTask={this.addTask} getTasks={this.getTasks} show={this.state.showModal} />
                 </div>
             </div>
         );
