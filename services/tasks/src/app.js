@@ -4,6 +4,7 @@ const taskController = require('./controller.js');
 const app = require('express')();
 
 app.use(require('body-parser').json());
+app.use(require('cors')());
 
 const API = '/api/v1';
 
