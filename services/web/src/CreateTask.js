@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 
 const TASKS_API = `${process.env.REACT_APP_TASKS_API_HOST}:${process.env.REACT_APP_TASKS_API_PORT}/api/v1`;
 
+// This component is the modal that appears when "Create Task" is clicked. It is
+// responsible for taking what the user inputs into the fields and sending them
+// to the route on the tasks api server responsible for task creation. It is
+// also responsible for reporting any errors that arise.
 export default class CreateTask extends React.Component {
     
     constructor(props) {
@@ -10,12 +14,17 @@ export default class CreateTask extends React.Component {
         this.state = {task: {}};
     }
     
+    // Every time an input field is changed, save the current value of that
+    // field into a task object that later gets uploaded to the tasks api
+    // server.
     onChange = event => {
         let task = this.state.task;
         task[event.target.name] = event.target.value;
         this.setState({task: task});
     }
     
+    // On submission, take the built task object and upload it to the tasks api
+    // server. Report any errors that come up.
     submit = async () => {
         const data = await fetch(`${TASKS_API}/task`, {
             body: JSON.stringify(this.state.task),
@@ -33,6 +42,8 @@ export default class CreateTask extends React.Component {
     render() {
         let alert = null;
         if (this.state.errors) {
+            // Just pull the first error from the list to prevent over-crowding
+            // of errors.
             const error = this.state.errors[0];
             alert = (
                 <div className="alert alert-danger" role="alert">

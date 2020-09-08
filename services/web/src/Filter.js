@@ -1,6 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+// This component is the filter button in the top navbar and its associated
+// dropdown menu with several filter options. This controls re-querying the
+// tasks api server for task ids using the selected filter options.
 export default class Filter extends React.Component {
     
     constructor(props) {
@@ -8,12 +11,16 @@ export default class Filter extends React.Component {
         this.state = {completed: false, dueToday: false, dueTomorrow: false, overdue: false};
     }
     
+    // Prevent the component from constantly querying the tasks api server for
+    // the tasks id list by making sure it's only done on state change.
     componentDidUpdate(prevProps, prevState) {
         if (this.state !== prevState) {
             this.props.getTasks(this.state);
         }
     }
     
+    // Every time an input field is changed, update the state with the value of
+    // that field.
     onChange = event => {
         let state = {};
         state[event.target.id] = event.target.checked;

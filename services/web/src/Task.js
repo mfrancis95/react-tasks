@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 
 const TASKS_API = `${process.env.REACT_APP_TASKS_API_HOST}:${process.env.REACT_APP_TASKS_API_PORT}/api/v1`;
 
+// The Task component is a visual representation of a task from the database. It
+// features a checkbox control that persists the state of the checkbox over to
+// the task's "completed" field in the database.
 export default class Task extends React.Component {
     
     constructor(props) {
@@ -10,12 +13,18 @@ export default class Task extends React.Component {
         this.state = {completed: false};
     }
     
+    // On initial load of the component, pull full information about the task
+    // from the database.
     componentDidMount() {
         this.getTask();
     }
     
+    // When the delete button is clicked, delegate to the App component's
+    // function for deleting a task, passing in the id.
     deleteTask = () => this.props.deleteTask(this.props._id);
     
+    // Query the database for full information (name, description, dueDate) of
+    // a task so the fields can be displayed.
     getTask = async () => {
         const data = await fetch(`${TASKS_API}/task/${this.props._id}`)
             .then(response => response.json());
@@ -31,6 +40,8 @@ export default class Task extends React.Component {
         }
     }
     
+    // Handler for the completed checkbox, which updates the task's completed
+    // field in the database.
     complete = async () => {
         const data = await fetch(`${TASKS_API}/task/${this.props._id}`, {
             body: JSON.stringify({completed: true}),
@@ -50,6 +61,7 @@ export default class Task extends React.Component {
             tomorrow.setDate(tomorrow.getDate() + 1);
             tomorrow.setHours(23, 59, 59, 999);
             if (this.state.dueDate < today) {
+                // Only show "Overdue" if the task wasn't completed.
                 if (!this.state.completed) {
                     due = (<span className="badge badge-danger">Overdue</span>);
                 }
@@ -62,6 +74,7 @@ export default class Task extends React.Component {
             }
         }
         let completed = null;
+        // If the task was completed, strikeout the "Complete" text.
         if (this.props.completed) {
             completed = (<del>Complete</del>);
         }

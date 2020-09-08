@@ -5,6 +5,8 @@ import CreateTask from './CreateTask';
 
 const TASKS_API = `${process.env.REACT_APP_TASKS_API_HOST}:${process.env.REACT_APP_TASKS_API_PORT}/api/v1`;
 
+// This is the main application component that manages all the task instances
+// on screen.
 export default class App extends React.Component {
     
     constructor(props) {
@@ -16,6 +18,8 @@ export default class App extends React.Component {
         this.getTasks();
     }
     
+    // Retrieve information about a task by id from the tasks api server and add
+    // it to the front of the tasks list.
     addTask = async (_id) => {
         const data = await fetch(`${TASKS_API}/task/${_id}`)
             .then(response => response.json());
@@ -26,6 +30,8 @@ export default class App extends React.Component {
         }
     }
     
+    // Send a request to the tasks api server to delete a task by id, then
+    // remove it from the internal client-side list.
     deleteTask = async (_id) => {
         const data = await fetch(`${TASKS_API}/task/${_id}`, {method: 'DELETE'})
             .then(response => response.json());
@@ -36,6 +42,8 @@ export default class App extends React.Component {
         }
     }
     
+    // Retrieve a list of task ids from the tasks api server, passing in
+    // optional filters taken from the Filter component.
     getTasks = async (filters = {}) => {
         let route = `${TASKS_API}/tasks?`;
         if (filters.completed) {
