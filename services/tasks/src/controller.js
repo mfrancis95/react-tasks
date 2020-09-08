@@ -11,7 +11,8 @@ exports.createTask = async (request, response) => {
     if (!errors.isEmpty()) {
         response.status(422).json({errors: errors.array(), success: false});
     }
-    const result = await tasks.insertOne(matchedData(request));
+    let task = matchedData(request);
+    const result = await tasks.insertOne(task);
     response.json({_id: result.insertedId, success: true});
 };
 
@@ -31,6 +32,31 @@ exports.getTasks = async (request, response) => {
     let filters = {};
     if ('completed' in request.query) {
         filters.completed = request.query.completed === 'true';
+    }
+    let $and = [];
+    if ('dueToday' in request.query) {
+        let start = new Date();
+        start.setHours(0, 0, 0, 0);
+        let end = new Date();
+        end.setHours(23, 59, 59, 999);
+        $and.push({dueDate: {$gte: start}});
+        $and.push({dueDate: {$lte: end}});
+    }
+    if ('dueTomorrow' in request.query) {
+        let start = new Date();
+        start.setDate(start.getDate() + 1);
+        start.setHours(0, 0, 0, 0);
+        let end = new Date(start);
+        end.setHours(23, 59, 59, 999);
+        $and.push({dueDate: {$gte: start}});
+        $and.push({dueDate: {$lte: end}});
+    }
+    if ('overdue' in request.query) {
+        $and.push({completed: false});
+        $and.push({dueDate: {$lt: new Date()}});
+    }
+    if ($and.length) {
+        filters.$and = $and;
     }
     response.json({success: true, tasks: await tasks.find(filters, {_id: true}).toArray()});
 };

@@ -1,6 +1,7 @@
 import React from 'react';
-import CreateTask from './CreateTask';
+import Filter from './Filter';
 import Task from './Task';
+import CreateTask from './CreateTask';
 
 const TASKS_API = `${process.env.REACT_APP_TASKS_API_HOST}:${process.env.REACT_APP_TASKS_API_PORT}/api/v1`;
 
@@ -70,6 +71,7 @@ export default class App extends React.Component {
                                     <a className="nav-link" data-toggle="modal" data-target="#modal" href="#">Create Task</a>
                                 </li>
                             </ul>
+                            <Filter getTasks={this.getTasks} />
                         </div>
                   </div>
                 </nav>
