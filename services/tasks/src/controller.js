@@ -6,6 +6,9 @@ MongoClient.connect(`mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO
     tasks = client.db('tasks').collection('tasks');
 });
 
+// Validate that the request body conforms to the schema of a task. On
+// validation, insert the task into the database and return the id of the
+// created task.
 exports.createTask = async (request, response) => {
     const errors = validationResult(request);
     if (!errors.isEmpty()) {
@@ -16,18 +19,21 @@ exports.createTask = async (request, response) => {
     response.json({_id: result.insertedId, success: true});
 };
 
+// Delete a task from the database by id.
 exports.deleteTask = async (request, response) => {
     const result = await tasks.removeOne({
         _id: new MongoClient.ObjectID(request.params._id)});
     response.json({success: result.deletedCount > 0});
 };
 
+// Retrieve a task from the database by id.
 exports.getTask = async (request, response) => {
     response.json({
         success: true,
         task: await tasks.findOne({_id: new MongoClient.ObjectID(request.params._id)}, {_id: false})});
 }
 
+// Retrieve task ids from the database with optional filters.
 exports.getTasks = async (request, response) => {
     let filters = {};
     if ('completed' in request.query) {
@@ -61,6 +67,7 @@ exports.getTasks = async (request, response) => {
     response.json({success: true, tasks: await tasks.find(filters, {_id: true}).toArray()});
 };
 
+// Update a task's property in the database.
 exports.updateTask = async (request, response) => {
     const result = await tasks.updateOne(
         {_id: new MongoClient.ObjectID(request.params._id)},
