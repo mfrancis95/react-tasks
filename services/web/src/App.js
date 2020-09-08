@@ -1,11 +1,12 @@
 import React from 'react';
+import Task from './Task';
 
 const TASKS_API = `${process.env.REACT_APP_TASKS_API_HOST}:${process.env.REACT_APP_TASKS_API_PORT}/api/v1`;
 
 export default class App extends React.Component {
     
-    constructor(properties) {
-        super(properties);
+    constructor(props) {
+        super(props);
         this.state = {tasks: []};
     }
     
@@ -53,6 +54,9 @@ export default class App extends React.Component {
     }
     
     render() {
+        const tasks = this.state.tasks.map(task => {
+            return <Task _id={task._id} deleteTask={this.deleteTask} key={task._id} />
+        });
         return (
             <div>
                 <nav className="bg-primary navbar navbar-dark navbar-expand-lg sticky-top">
@@ -62,6 +66,7 @@ export default class App extends React.Component {
                 </nav>
                 <div className="container mt-4" id="root">
                     <div className="card-columns">
+                        {tasks}
                     </div>
                 </div>
             </div>
