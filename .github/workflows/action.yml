@@ -10,11 +10,15 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-
+  tasks:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v1
     - run: cd services/tasks && npm install && node_modules/.bin/eslint src
+  web:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+    - run: cd services/web && npm install && node_modules/.bin/eslint src
