@@ -1,0 +1,30 @@
+version: '3'
+services:
+  mongodb:
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    image: mongo
+    ports:
+      - '27017:27017'
+  tasks:
+    build: ./services/tasks/
+    environment:
+      MONGO_HOST: mongodb
+      MONGO_USERNAME: admin
+      MONGO_PASSWORD: admin
+    depends_on:
+      - mongodb
+    env_file: .env
+    ports:
+      - '8000:8000'
+  web:
+    build:
+      args:
+        - REACT_APP_TASKS_API_HOST=$TASKS_API_HOST
+        - REACT_APP_TASKS_API_PORT=$TASKS_API_PORT
+      context: ./services/web/
+    depends_on:
+      - tasks
+    ports:
+      - '8001:8001'
