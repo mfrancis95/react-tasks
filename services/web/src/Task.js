@@ -81,6 +81,10 @@ export default class Task extends React.Component {
         else {
             completed = (<span>Complete</span>);
         }
+        let dueDate = this.state.dueDate;
+        if (dueDate) {
+            dueDate = (<p className="card-text small">Due {`${dueDate.getFullYear()}-${dueDate.getMonth()}-${dueDate.getDate()}`}</p>);
+        }
         return (
             <div className="card">
                 <div className="card-header">
@@ -97,6 +101,7 @@ export default class Task extends React.Component {
                 </div>
                 <div className="card-body">
                     <p className="card-text">{this.state.description}</p>
+                    {dueDate}
                 </div>
                 <div className="card-footer">
                     <div className="custom-control custom-checkbox pl-0">

@@ -21,7 +21,7 @@ const API = '/api/v1';
 // }
 app.post(
     `${API}/task`,
-    [body('name'), body('description'), body('dueDate').toDate()],
+    [body('name').exists(), body('description').exists(), body('dueDate').exists().toDate()],
     taskController.createTask);
 
 // Route for updating a task property.

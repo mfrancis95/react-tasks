@@ -14,9 +14,11 @@ exports.createTask = async (request, response) => {
     if (!errors.isEmpty()) {
         response.status(422).json({errors: errors.array(), success: false});
     }
-    let task = matchedData(request);
-    const result = await tasks.insertOne(task);
-    response.json({_id: result.insertedId, success: true});
+    else {
+        let task = matchedData(request);
+        const result = await tasks.insertOne(task);
+        response.json({_id: result.insertedId, success: true});
+    }
 };
 
 // Delete a task from the database by id.
@@ -64,7 +66,7 @@ exports.getTasks = async (request, response) => {
     if ($and.length) {
         filters.$and = $and;
     }
-    response.json({success: true, tasks: await tasks.find(filters, {_id: true}).toArray()});
+    response.json({success: true, tasks: await tasks.find(filters, {_id: true}).sort({_id: -1}).toArray()});
 };
 
 // Update a task's property in the database.
