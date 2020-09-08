@@ -46,7 +46,6 @@ export default class App extends React.Component {
         if (filters.overdue) {
             route += 'overdue=true';
         }
-        console.log(route);
         const data = await fetch(route).then(response => response.json());
         if (data.success) {
             this.setState({tasks: data.tasks});
@@ -56,13 +55,13 @@ export default class App extends React.Component {
     render() {
         return (
             <div>
-                <nav class="bg-primary navbar navbar-dark navbar-expand-lg sticky-top">
-                  <div class="container">
-                    <a class="navbar-brand" href="/">Tasks</a>
+                <nav className="bg-primary navbar navbar-dark navbar-expand-lg sticky-top">
+                  <div className="container">
+                    <a className="navbar-brand" href="/">Tasks</a>
                   </div>
                 </nav>
-                <div class="container mt-4" id="root">
-                    <div class="card-columns">
+                <div className="container mt-4" id="root">
+                    <div className="card-columns">
                     </div>
                 </div>
             </div>
